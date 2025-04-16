@@ -9,10 +9,9 @@ Options:
   -o, --output_file TEXT          Specify output file
   -n, --number INTEGER            Specify max number of publications to receive
                                   for each author
-  -a, --apis [PubMed|ArXiv|MDPI|Elsevier|Springer|Wiley|CrossRef|PLOS]
+  -a, --apis [PubMed|CrossRef]
                                   Specify APIs to query  [default: PubMed,
-                                  ArXiv, MDPI, Elsevier, Springer, Wiley,
-                                  CrossRef, PLOS]
+                                  PLOS]
   --list                          Display APIs configured for search queries
   -f, --format [json|csv|xlsx]    Select the output format from: csv, xlsx, or
                                   json.  [default: json]
