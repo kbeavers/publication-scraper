@@ -215,6 +215,33 @@ class PubMed(Base):
             logging.debug(f"Successfully retrieved {len(publications)} publications")
         return publications
 
+
+def search_multiple_authors(authors, rows=10):
+    """
+    Search PubMed Central for works written by multiple authors
+    :params authors: list of author names
+    :params rows: maximum number of publications to return per author (default is 10)
+    :return: a dict {author_name: {summary_info}} for each author
+    """
+    pubmed = PubMed()
+    all_results = {}
+
+    for author in authors:
+        logging.debug(f"Searching for publications by {author}...")
+        if not author or author == "None None":  # Skip empty or None None authors
+            logging.warning(f"Skipping invalid author name: {author}")
+            continue
+        try:
+            publications = pubmed.get_publications_by_author(author, rows)
+            if publications:  # Only add authors with valid publications
+                all_results[author] = publications
+        except Exception as e:
+            logging.error(f"Error fetching data for {author}: {e}")
+        time.sleep(0.4)  # avoids RESPONSE 429 (rate limit violation)
+
+    return all_results
+
+
 def main():
     author_names = input("Enter author names (comma-separated): ").split(",")
     author_names = [name.strip() for name in author_names]
