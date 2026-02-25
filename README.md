@@ -26,15 +26,13 @@ Options:
   --log-level [NOTSET|DEBUG|INFO|WARNING|ERROR|CRITICAL]
                                   Set the log level  [default: 20]
   --log-file PATH                 Set the log file
-  -i, --input_file TEXT           Specify input file
+  -i, --input_file PATH           Specify input file (.csv or .xlsx)
   -o, --output_file TEXT          Specify output file
   -n, --number INTEGER            Specify max number of publications to receive
                                   for each author
-  -a, --apis [PubMed|ArXiv|MDPI|Elsevier|Springer|Wiley|CrossRef|PLOS]
-                                  Specify APIs to query  [default: PubMed,
-                                  ArXiv, MDPI, Elsevier, Springer, Wiley,
-                                  CrossRef, PLOS]
-  --list                          List APIs available for querying
+  -a, --apis [PubMed|CrossRef]    Specify APIs to query  [default: PubMed,
+                                  CrossRef]
+  --list                          Display APIs configured for search queries
   -f, --format [json|csv|xlsx]    Select the output format from: csv, xlsx, or
                                   json.  [default: json]
   -cd, --cutoff_date TEXT         Specify the latest date to pull publications.
@@ -45,13 +43,16 @@ To run the scraper with the default options (using the included sample input), i
 ```console
 > bash run.sh pubscraper
 ```
-By default, the script will request 10 publications from each API for each author, writing the results to `output.json`.
+By default, the script will request up to 10 publications from each selected
+API for each author, writing the results to `output.json` (or `output.csv` /
+`output.xlsx` depending on `--format`).
 
-The tool expects an Excel spreadsheet as input, appearing as follows:
-root_institution_name| first_name| last_name|...
+The tool expects a CSV or XLSX file as input, with columns:
+
+root_institution_name| last_name| first_name|...
 ---|---|---|---
-The University of Texas| James| Carson| ...
-The University of Texas| Kelsey| Beavers| ...
+The University of Texas at Austin| Beavers| Kelsey m| ...
+The University of Texas at Austin| Carson| James| ...
 
 #### Output format can be specified with the `--format` or `-f` flag
 
