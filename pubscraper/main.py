@@ -1,9 +1,10 @@
+import csv
 import json
 import logging
 import time
 import os
-import tablib
 
+import tablib
 from openpyxl import load_workbook
 from dateutil.parser import parse
 
@@ -15,6 +16,7 @@ import pubscraper.config as config
 
 from pubscraper.APIClasses.PubMed import PubMed
 from pubscraper.APIClasses.CrossRef import CrossRef
+from pubscraper.filters import filter_all_publications_by_author_and_affiliation
 
 
 LOG_FORMAT = config.LOGGER_FORMAT_STRING
@@ -59,6 +61,69 @@ def list_configured_apis(ctx, param, value):
         ctx.exit()
 
 
+def read_input_file(input_file):
+    """
+    Read author data from CSV or XLSX input files.
+    Returns a dict of {display_name: [author_search_name, institution]}.
+
+    Expected columns: root_institution_name, last_name, first_name
+    The first_name may include a middle initial (e.g. "Kelsey m").
+    """
+    name_dict = {}
+    ext = os.path.splitext(input_file)[1].lower()
+
+    if ext == ".csv":
+        with open(input_file, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                institution = row.get("root_institution_name", "").strip()
+                last_name = row.get("last_name", "").strip()
+                first_name = row.get("first_name", "").strip()
+
+                if not last_name or not first_name:
+                    continue
+
+                display_name = f"{last_name} {first_name}"
+                search_name = f"{last_name} {first_name}"
+                name_dict[display_name] = [search_name, institution]
+
+    elif ext in (".xlsx", ".xls"):
+        workbook = load_workbook(filename=input_file, read_only=True)
+        worksheet = workbook.active
+        rows = worksheet.rows
+        header = [cell.value for cell in next(rows)]
+
+        inst_idx = _find_column(header, "root_institution_name")
+        last_idx = _find_column(header, "last_name")
+        first_idx = _find_column(header, "first_name")
+
+        for row in rows:
+            institution = str(row[inst_idx].value or "").strip() if inst_idx is not None else ""
+            last_name = str(row[last_idx].value or "").strip() if last_idx is not None else ""
+            first_name = str(row[first_idx].value or "").strip() if first_idx is not None else ""
+
+            if not last_name or not first_name:
+                continue
+
+            display_name = f"{last_name} {first_name}"
+            search_name = f"{last_name} {first_name}"
+            name_dict[display_name] = [search_name, institution]
+
+        workbook.close()
+    else:
+        raise ValueError(f"Unsupported file format: {ext}. Use .csv or .xlsx")
+
+    return name_dict
+
+
+def _find_column(header, name):
+    """Find a column index by name (case-insensitive)."""
+    for i, col in enumerate(header):
+        if col and col.strip().lower() == name.lower():
+            return i
+    return None
+
+
 @click.command()
 @click.version_option(__version__)
 @click.option(
@@ -81,8 +146,8 @@ def list_configured_apis(ctx, param, value):
     "-i",
     "--input_file",
     type=click.Path(exists=True),
-    default="example_input.xlsx",
-    help="Specify input file",
+    default="example_input.csv",
+    help="Specify input file (.csv or .xlsx)",
 )
 @click.option("-o", "--output_file", default="output", help="Specify output file")
 @click.option(
@@ -104,7 +169,6 @@ def list_configured_apis(ctx, param, value):
     show_default=True,
     help="Specify APIs to query",
 )
-# TODO: I don't like the help message saying 'available' for querying, rephrase for clarity
 @click.option(
     "--list",
     "list_apis",
@@ -133,8 +197,6 @@ def list_configured_apis(ctx, param, value):
     show_default=True,
     help="Specify the latest date to pull publications. Example input: 2024 or 2024-05 or 2024-05-10.",
 )
-
-# TODO: batch author names to circumvent rate limits?
 def main(
     log_level,
     log_file,
@@ -150,68 +212,60 @@ def main(
     if log_file:
         logger.debug(f"Writing logs to {log_file}")
 
-    logger.info(f"Querying the following APIs:\n{(", ").join(apis)}")
+    logger.info(f"Querying the following APIs:\n{', '.join(apis)}")
+
     try:
-        authors_workbook = load_workbook(filename=input_file, read_only=True)
-        worksheet = authors_workbook[config.WS_NAME]
-        rows = worksheet.rows
-
-        name_dict = {}
-        if worksheet.max_row > 1:
-            next(rows)  # skip header row
-            for row in rows:
-                institution = row[0].value
-                author_name = f"{row[1].value} {row[2].value}"
-                name_dict[author_name] = [author_name, institution]
-
-        logging.debug(f"number of names in name_dict: {len(name_dict.keys())}")
-    except FileNotFoundError:
-        logger.error(f"Couldn't read input file {input_file}, exiting")
+        name_dict = read_input_file(input_file)
+        logger.debug(f"Number of names in name_dict: {len(name_dict)}")
+    except (FileNotFoundError, ValueError) as e:
+        logger.error(f"Couldn't read input file {input_file}: {e}")
         exit(1)
 
-    logger.debug(f"Querying the following APIs: {apis}")
     logger.debug(f"Requesting {number} publications for each author")
 
     authors_and_pubs = []
 
-    for author in name_dict.keys():
-        results = {author: []}
-        # FIXME: we should filter by date before the API queries (if the API supports date filtering)
+    for display_name, (search_name, institution) in name_dict.items():
+        results = {display_name: []}
         authors_pubs = []
+
         for api_name in apis:
             api = APIS[api_name]
-            pubs_found = api.get_publications_by_author(author, number)
+            pubs_found = api.get_publications_by_author(
+                search_name, number, institution=institution
+            )
             if pubs_found:
                 for pub in pubs_found:
                     publication_date_str = pub.get("publication_date", "")
 
-                    # If a cutoff date is provided, check if the publication date is after it
                     if cutoff_date:
-                        publication_date = (
-                            parse(publication_date_str).strftime("%Y-%m-%d")
-                            if publication_date_str
-                            else ""
-                        )
+                        try:
+                            publication_date = (
+                                parse(publication_date_str).strftime("%Y-%m-%d")
+                                if publication_date_str
+                                else ""
+                            )
+                        except Exception:
+                            publication_date = ""
                         if publication_date and publication_date > cutoff_date:
                             authors_pubs.append(pub)
                     else:
                         authors_pubs.append(pub)
 
-        results.update({author: authors_pubs})
+        results.update({display_name: authors_pubs})
         authors_and_pubs.append(results)
         time.sleep(config.TIME_SLEEP)
 
-    """
-    Using TabLib to format data in specified format
-    """
-    logger.debug(f"Results: {(json.dumps(authors_and_pubs, indent=2))}")
+    filter_all_publications_by_author_and_affiliation(authors_and_pubs, name_dict)
+
+    logger.debug(f"Results: {json.dumps(authors_and_pubs, indent=2)}")
     logger.info(f"Exporting the dataset in the specified format: {format} ")
 
     try:
         os.remove(output_file)
-        logger.debug(f"successfully removed {output_file}")
+        logger.debug(f"Successfully removed {output_file}")
     except Exception:
-        logger.warning(f"could not remove {output_file}")
+        logger.warning(f"Could not remove {output_file}")
 
     dataset = tablib.Dataset()
 
@@ -220,28 +274,21 @@ def main(
         "Author",
         "DOI",
         "Journal",
-        "Content Type",
         "Publication Date",
         "Title",
         "Authors",
     ]
 
-    # Loop through each author and their publications in authors_and_pubs
     for author_result in authors_and_pubs:
-        for (
-            author,
-            publications,
-        ) in author_result.items():  # Use .items() to unpack dictionary
+        for author, publications in author_result.items():
             for pub in publications:
-                if isinstance(pub, dict):  # Only process dictionary entries
-                    # Safely fetch values using .get to avoid KeyError, defaulting to 'N/A' if the key is missing
+                if isinstance(pub, dict):
                     dataset.append(
                         [
                             pub.get("from", "N/A"),
                             author,
                             pub.get("doi", "N/A"),
                             pub.get("journal", "N/A"),
-                            pub.get("content_type", "N/A"),
                             pub.get("publication_date", "N/A"),
                             pub.get("title", "N/A"),
                             pub.get("authors", "N/A"),
