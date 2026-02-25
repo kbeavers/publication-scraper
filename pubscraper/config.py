@@ -6,8 +6,6 @@ LOGGER_LEVEL = "INFO"
 PUBMED_SEARCH_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
 PUBMED_SUMMARY_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
 PUBMED_FETCH_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
-CROSSREF_URL = "https://api.crossref.org/works"
-CROSSREF_MAX_PAGES = 5
 
 TIME_SLEEP = 0.4
 

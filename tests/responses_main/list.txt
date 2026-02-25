@@ -1,3 +1,2 @@
 Available endpoints:
   PubMed
-  CrossRef

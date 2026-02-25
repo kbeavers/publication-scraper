@@ -15,7 +15,6 @@ from pubscraper.version import __version__
 import pubscraper.config as config
 
 from pubscraper.APIClasses.PubMed import PubMed
-from pubscraper.APIClasses.CrossRef import CrossRef
 from pubscraper.filters import filter_all_publications_by_author_and_affiliation
 
 
@@ -26,7 +25,6 @@ logger = logging.getLogger(__name__)
 
 APIS = {
     "PubMed": PubMed(),
-    "CrossRef": CrossRef(),
 }
 
 
