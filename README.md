@@ -30,8 +30,7 @@ Options:
   -o, --output_file TEXT          Specify output file
   -n, --number INTEGER            Specify max number of publications to receive
                                   for each author
-  -a, --apis [PubMed|CrossRef]    Specify APIs to query  [default: PubMed,
-                                  CrossRef]
+  -a, --apis [PubMed]              Specify APIs to query  [default: PubMed]
   --list                          Display APIs configured for search queries
   -f, --format [json|csv|xlsx]    Select the output format from: csv, xlsx, or
                                   json.  [default: json]
@@ -67,33 +66,39 @@ output.json
 
 [
     {
-        "James Carson": [
+        "Beavers Kelsey m": [
             {
                 "from": "PubMed",
-                "journal": "BMC Public Health",
-                "publication_date": "2024/10/22 00:00",
-                "title": "Social inequalities in child mental health trajectories: a longitudinal study using birth cohort data 12 countries",
-                "authors": "Cadman T,Avraam D,Carson J,Elhakeem A,Grote V,Guerlich K,Guxens M,Howe LD,Huang RC,Harris JR,Houweling TA,Hyde E,Jaddoe V,Jansen PW,Julvez J,Koletzko B,Lin A,Margetaki K,Melchior M,Nader JT,Pedersen M,Pizzi C,Roumeliotaki T,Swertz M,Tafflet M,Taylor-Robinson D,Wootton RE,Strandberg-Larsen K",
-                "doi": "10.1186/s12889-024-20291-5"
-            },
-            ...
-
-        ]
-    }
-     {
-        "Kelsey Beavers": [
+                "journal": "Scientific reports",
+                "publication_date": "2026-Jan-27",
+                "title": "Runaway coral-algal dysbiosis may be responsible for rapid coral tissue loss.",
+                "authors": "Ashley M Rossin,Kelsey M Beavers,Carly E Karrick,Jeanne Bloomberg,Sonora Meiling,Gaby E Carpenter,Benjamin H Farmer,Brittney Green,Emily Van Buren,Alex Veglia,Amy Apprill,Marilyn Brandt,Adrienne M S Correa,Ian C Enochs,Stephen R Midway,Erinn M Muller,Laura Mydlarz,Tyler B Smith,Michael S Studivan,Daniel M Holstein",
+                "affiliations": [
+                    {
+                        "author": "Ashley M Rossin",
+                        "affiliations": [
+                            "Department of Oceanography and Coastal Sciences, Louisiana State University, Baton Rouge, Louisiana, USA. ashley.rossin@noaa.gov.",
+                            "Cooperative Institute for Marine and Atmospheric Studies, University of Miami, Miami, Florida, USA. ashley.rossin@noaa.gov.",
+                            "NOAA's Atlantic Oceanographic and Meteorological Laboratory, Miami, Florida, USA. ashley.rossin@noaa.gov."
+                        ]
+                    },
+                    ...
+        {
+        "Carson James": [
             {
                 "from": "PubMed",
-                "journal": "Proceedings of the Royal Society B: Biological Sciences",
-                "publication_date": "2024/10/02 00:00",
-                "title": "Trade-off between photosymbiosis and innate immunity influences cnidarian\u2019s response to pathogenic bacteria",
-                "authors": "Emery MA,Beavers KM,Van Buren EW,Batiste R,Dimos B,Pellegrino MW,Mydlarz LD",
-                "doi": "10.1098/rspb.2024.0428"
-            },
-            ...
-        ]
-    }
-]
+                "journal": "American journal of physiology. Lung cellular and molecular physiology",
+                "publication_date": "2025-Nov-01",
+                "title": "Sorted-cell proteomics reveals an AT1-associated epithelial cornification phenotype and suggests endothelial redox imbalance in human bronchopulmonary dysplasia.",
+                "authors": "Mereena George Ushakumary,William B Chrisler,Gautam Bandyopadhyay,Heidie Huyck,Brittney L Gorman,Naina Beishembieva,Ariana Pitonzo,Zhenli J Lai,Thomas L Fillmore,Isaac Kwame Attah,Gail Deutsch,Jeffrey M Purkerson,Andrew M Dylag,Ravi S Misra,James P Carson,Joshua N Adkins,Gloria S Pryhuber,Geremy C Clair",
+                "affiliations": [
+                    {
+                        "author": "Mereena George Ushakumary",
+                        "affiliations": [
+                            "Biological Sciences Division, Earth and Biological Sciences Directorate, Pacific Northwest National Laboratory, Richland, Washington, United States."
+                        ]
+                    },
+                    ...
 ```
 
 
@@ -106,11 +111,10 @@ CSV output file
 ```console
 output.csv
 
-From,Author,DOI,Journal,Content Type,Publication Date,Title,Authors
-PubMed,James Carson,10.1186/s12889-024-20291-5,BMC Public Health,N/A,2024/10/22 00:00,Social inequalities in child mental health trajectories: a longitudinal study using birth cohort data 12 countries,"Cadman T,Avraam D,Carson J,Elhakeem A,Grote V,Guerlich K,Guxens M,Howe LD,Huang RC,Harris JR,Houweling TA,Hyde E,Jaddoe V,Jansen PW,Julvez J,Koletzko B,Lin A,Margetaki K,Melchior M,Nader JT,Pedersen M,Pizzi C,Roumeliotaki T,Swertz M,Tafflet M,Taylor-Robinson D,Wootton RE,Strandberg-Larsen K"
-PubMed,James Carson,10.1002/cnm.3559,International Journal for Numerical Methods in Biomedical Engineering,N/A,2021/12/27 00:00,Automating fractional flow reserve (FFR) calculation from CT scans: A rapid workflow using unsupervised learning and computational fluid dynamics,"Chakshu NK,Carson JM,Sazonov I,Nithiarasu P"
-Elsevier,Kelsey Beavers,10.1016/j.jcis.2015.10.053,Journal of Colloid and Interface Science,Article,2016-02-01,High conversion of HAuCl<inf>4</inf> into gold nanorods: A re-seeding approach,Canonico-May S.A.
-Springer,Kelsey Beavers,10.1186/s12874-024-02252-z,BMC Medical Research Methodology,Article,2024-06-03,Use of systems thinking and adapted group model building methods to understand patterns of technology use among older adults with type 1 diabetes: a preliminary process evaluation,"Kahkoska, Anna R., Smith, Cambray, Young, Laura A., Hassmiller Lich, Kristen"
+From,Author,DOI,Journal,Publication Date,Title,Authors
+PubMed,Beavers Kelsey m,10.1038/s41598-026-35666-4,Scientific reports,2026-Jan-27,Runaway coral-algal dysbiosis may be responsible for rapid coral tissue loss.,"Ashley M Rossin,Kelsey M Beavers,Carly E Karrick,Jeanne Bloomberg,Sonora Meiling,Gaby E Carpenter,Benjamin H Farmer,Brittney Green,Emily Van Buren,Alex Veglia,Amy Apprill,Marilyn Brandt,Adrienne M S Correa,Ian C Enochs,Stephen R Midway,Erinn M Muller,Laura Mydlarz,Tyler B Smith,Michael S Studivan,Daniel M Holstein"
+...
+PubMed,Carson James,10.1152/ajplung.00098.2025,American journal of physiology. Lung cellular and molecular physiology,2025-Nov-01,Sorted-cell proteomics reveals an AT1-associated epithelial cornification phenotype and suggests endothelial redox imbalance in human bronchopulmonary dysplasia.,"Mereena George Ushakumary,William B Chrisler,Gautam Bandyopadhyay,Heidie Huyck,Brittney L Gorman,Naina Beishembieva,Ariana Pitonzo,Zhenli J Lai,Thomas L Fillmore,Isaac Kwame Attah,Gail Deutsch,Jeffrey M Purkerson,Andrew M Dylag,Ravi S Misra,James P Carson,Joshua N Adkins,Gloria S Pryhuber,Geremy C Clair"
 ...
 ```
 
@@ -123,12 +127,10 @@ XLSX output file
 
 ```console
 output.xlsx
-
-From	Author	DOI	Journal	Content Type	Publication Date	Title	Authors
-PubMed	Dan Stanzione	10.1038/s41592-024-02296-5	Nature Methods	N/A	2024-05-07	Author Correction: brainlife.io: a decentralized and open-source cloud platform to support neuroscience research	Hayashi S,Caron BA,Heinsfeld AS,Vinci-Booher S,McPherson B,Bullock DN,Bertò G,Niso G,Hanekamp S,Levitas D,Ray K,MacKenzie A,Avesani P,Kitchell L,Leong JK,Nascimento-Silva F,Koudoro S,Willis H,Jolly JK,Pisner D,Zuidema TR,Kurzawski JW,Mikellidou K,Bussalb A,Chaumon M,George N,Rorden C,Victory C,Bhatia D,Aydogan DB,Yeh FC,Delogu F,Guaje J,Veraart J,Fischer J,Faskowitz J,Fabrega R,Hunt D,McKee S,Brown ST,Heyman S,Iacovella V,Mejia AF,Marinazzo D,Craddock RC,Olivetti E,Hanson JL,Garyfallidis E,Stanzione D,Carson J,Henschel R,Hancock DY,Stewart CA,Schnyer D,Eke DO,Poldrack RA,Bollmann S,Stewart A,Bridge H,Sani I,Freiwald WA,Puce A,Port NL,Pestilli F
-PubMed	Dan Stanzione	10.1038/s41592-024-02237-2	Nature Methods	N/A	2024-04-11	brainlife.io: a decentralized and open-source cloud platform to support neuroscience research	Hayashi S,Caron BA,Heinsfeld AS,Vinci-Booher S,McPherson B,Bullock DN,Bertò G,Niso G,Hanekamp S,Levitas D,Ray K,MacKenzie A,Avesani P,Kitchell L,Leong JK,Nascimento-Silva F,Koudoro S,Willis H,Jolly JK,Pisner D,Zuidema TR,Kurzawski JW,Mikellidou K,Bussalb A,Chaumon M,George N,Rorden C,Victory C,Bhatia D,Aydogan DB,Yeh FC,Delogu F,Guaje J,Veraart J,Fischer J,Faskowitz J,Fabrega R,Hunt D,McKee S,Brown ST,Heyman S,Iacovella V,Mejia AF,Marinazzo D,Craddock RC,Olivetti E,Hanson JL,Garyfallidis E,Stanzione D,Carson J,Henschel R,Hancock DY,Stewart CA,Schnyer D,Eke DO,Poldrack RA,Bollmann S,Stewart A,Bridge H,Sani I,Freiwald WA,Puce A,Port NL,Pestilli F
-PubMed	Dan Stanzione	10.1371/journal.pcbi.1011270	PLOS Computational Biology	N/A	2024-02-07	CyVerse: Cyberinfrastructure for open science	Swetnam TL,Antin PB,Bartelme R,Bucksch A,Camhy D,Chism G,Choi I,Cooksey AM,Cosi M,Cowen C,Culshaw-Maurer M,Davey R,Davey S,Devisetty U,Edgin T,Edmonds A,Fedorov D,Frady J,Fonner J,Gillan JK,Hossain I,Joyce B,Lang K,Lee T,Littin S,McEwen I,Merchant N,Micklos D,Nelson A,Ramsey A,Roberts S,Sarando P,Skidmore E,Song J,Sprinkle MM,Srinivasan S,Stanzione D,Strootman JD,Stryeck S,Tuteja R,Vaughn M,Wali M,Wall M,Walls R,Wang L,Wickizer T,Williams J,Wregglesworth J,Lyons E
-PubMed	Dan Stanzione		ArXiv	N/A	2023-08-11	brainlife.io: A decentralized and open source cloud platform to support neuroscience research	Hayashi S,Caron BA,Heinsfeld AS,Vinci-Booher S,McPherson B,Bullock DN,Bertò G,Niso G,Hanekamp S,Levitas D,Ray K,MacKenzie A,Kitchell L,Leong JK,Nascimento-Silva F,Koudoro S,Willis H,Jolly JK,Pisner D,Zuidema TR,Kurzawski JW,Mikellidou K,Bussalb A,Rorden C,Victory C,Bhatia D,Baran Aydogan D,Yeh FC,Delogu F,Guaje J,Veraart J,Bollman S,Stewart A,Fischer J,Faskowitz J,Chaumon M,Fabrega R,Hunt D,McKee S,Brown ST,Heyman S,Iacovella V,Mejia AF,Marinazzo D,Craddock RC,Olivetti E,Hanson JL,Avesani P,Garyfallidis E,Stanzione D,Carson J,Henschel R,Hancock DY,Stewart CA,Schnyer D,Eke DO,Poldrack RA,George N,Bridge H,Sani I,Freiwald WA,Puce A,Port NL,Pestilli F
+From	Author	DOI	Journal	Publication Date	Title	Authors
+PubMed	Beavers Kelsey m	10.1038/s41598-026-35666-4	Scientific reports	2026-Jan-27	Runaway coral-algal dysbiosis may be responsible for rapid coral tissue loss.	Ashley M Rossin,Kelsey M Beavers,Carly E Karrick,Jeanne Bloomberg,Sonora Meiling,Gaby E Carpenter,Benjamin H Farmer,Brittney Green,Emily Van Buren,Alex Veglia,Amy Apprill,Marilyn Brandt,Adrienne M S Correa,Ian C Enochs,Stephen R Midway,Erinn M Muller,Laura Mydlarz,Tyler B Smith,Michael S Studivan,Daniel M Holstein
+...
+PubMed	Carson James	10.1152/ajplung.00098.2025	American journal of physiology. Lung cellular and molecular physiology	2025-Nov-01	Sorted-cell proteomics reveals an AT1-associated epithelial cornification phenotype and suggests endothelial redox imbalance in human bronchopulmonary dysplasia.	Mereena George Ushakumary,William B Chrisler,Gautam Bandyopadhyay,Heidie Huyck,Brittney L Gorman,Naina Beishembieva,Ariana Pitonzo,Zhenli J Lai,Thomas L Fillmore,Isaac Kwame Attah,Gail Deutsch,Jeffrey M Purkerson,Andrew M Dylag,Ravi S Misra,James P Carson,Joshua N Adkins,Gloria S Pryhuber,Geremy C Clair
 ...
 ```
 
